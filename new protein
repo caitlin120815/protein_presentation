@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proteins: Functions, Types, and Tests</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .presentation-container {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .quiz-container {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #34a853, #0d652d);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.5rem;
+        }
+        
+        /* Slide presentation styles */
+        .slideshow {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            padding: 30px;
+            height: 100%;
+            overflow-y: auto;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-color: rgba(26, 115, 232, 0.2);
+            color: #1a73e8;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .slide h2 {
+            color: #1a73e8;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f0fe;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+        }
+        
+        .slide table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .slide th {
+            background-color: #e8f0fe;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .slide td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .slide-content {
+            font-size: 1.1rem;
+        }
+        
+        .highlight {
+            background-color: #e8f0fe;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #1a73e8;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #0d47a1;
+        }
+        
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 10px;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .dot.active {
+            background-color: #1a73e8;
+        }
+        
+        /* Quiz styles */
+        .quiz-content {
+            padding: 20px;
+            height: 500px;
+            overflow-y: auto;
+        }
+        
+        .quiz-intro {
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f7ff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .quiz-intro h3 {
+            color: #34a853;
+            margin-bottom: 10px;
+        }
+        
+        .question {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .question.active {
+            display: block;
+        }
+        
+        .question-number {
+            display: inline-block;
+            background-color: #34a853;
+            color: white;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 15px;
+            background-color: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        
+        .option:hover {
+            background-color: #f0f7ff;
+            border-color: #1a73e8;
+        }
+        
+        .option.selected {
+            background-color: #e8f0fe;
+            border-color: #1a73e8;
+        }
+        
+        .option.correct {
+            background-color: #e6f4ea;
+            border-color: #34a853;
+        }
+        
+        .option.incorrect {
+            background-color: #fce8e6;
+            border-color: #d93025;
+        }
+        
+        .feedback {
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background-color: #e6f4ea;
+            color: #0d652d;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background-color: #fce8e6;
+            color: #d93025;
+            display: block;
+        }
+        
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+        
+        .results {
+            padding: 30px;
+            text-align: center;
+            display: none;
+        }
+        
+        .results.active {
+            display: block;
+        }
+        
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #1a73e8;
+            margin: 20px 0;
+        }
+        
+        .score-text {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+        
+        .restart-btn {
+            background-color: #34a853;
+            margin-top: 20px;
+        }
+        
+        .restart-btn:hover {
+            background-color: #0d652d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .slideshow, .quiz-content {
+                height: 400px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Proteins: Functions, Types, and Tests</h1>
+            <p class="subtitle">Interactive Science Presentation & Quiz</p>
+        </header>
+        
+        <div class="app-container">
+            <!-- Presentation Section -->
+            <div class="presentation-container">
+                <div class="section-title">
+                    <i class="fas fa-microscope"></i> Protein Presentation
+                </div>
+                
+                <div class="slideshow">
+                    <!-- Slide 1 -->
+                    <div class="slide active">
+                        <div class="slide-number">Slide 1 of 16</div>
+                        <h2>Proteins: Functions, Classifications, and Laboratory Tests</h2>
+                        <div class="slide-content">
+                            <p>Science Presentation</p>
+                            <p><em>(Study of biomolecules essential for life processes)</em></p>
+                            <div style="text-align: center; margin-top: 30px;">
+                                <i class="fas fa-dna" style="font-size: 4rem; color: #1a73e8;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 2 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 2 of 16</div>
+                        <h2>What are Proteins?</h2>
+                        <div class="slide-content">
+                            <ul>
+                                <li>Proteins are <span class="highlight">large organic molecules</span> made of amino acids</li>
+                                <li>Contain <span class="highlight">Carbon, Hydrogen, Oxygen, Nitrogen</span> (sometimes Sulfur)</li>
+                                <li>Called the <span class="highlight">building blocks of the body</span></li>
+                                <li>Essential for <span class="highlight">growth, repair, and regulation</span> of body processes</li>
+                                <li>Found in <span class="highlight">all living cells</span></li>
+                            </ul>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <i class="fas fa-atom" style="font-size: 3rem; color: #34a853;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 3 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 3 of 16</div>
+                        <h2>Amino Acids</h2>
+                        <div class="slide-content">
+                            <ul>
+                                <li><span class="highlight">Small units</span> that make up proteins</li>
+                                <li>Linked together by <span class="highlight">peptide bonds</span></li>
+                                <li><span class="highlight">20 common amino acids</span> in living organisms</li>
+                                <li>Sequence determines the protein's <span class="highlight">shape and function</span></li>
+                                <li>Even one wrong amino acid may change the protein function (<span class="highlight">mutation effect</span>)</li>
+                            </ul>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <div style="display: inline-block; padding: 10px 20px; background-color: #e8f0fe; border-radius: 8px;">
+                                    <i class="fas fa-link" style="color: #1a73e8;"></i> Peptide Bond Formation
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 4 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 4 of 16</div>
+                        <h2>Levels of Protein Structure</h2>
+                        <div class="slide-content">
+                            <ol>
+                                <li><span class="highlight">Primary</span> — sequence of amino acids</li>
+                                <li><span class="highlight">Secondary</span> — alpha helix and beta pleated sheet (hydrogen bonding)</li>
+                                <li><span class="highlight">Tertiary</span> — 3D folding due to side-chain interactions</li>
+                                <li><span class="highlight">Quaternary</span> — multiple polypeptide chains combined (e.g., hemoglobin)</li>
+                            </ol>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <div style="display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                                    <div style="padding: 8px 15px; background-color: #e8f0fe; border-radius: 5px;">1°</div>
+                                    <div style="padding: 8px 15px; background-color: #e6f4ea; border-radius: 5px;">2°</div>
+                                    <div style="padding: 8px 15px; background-color: #fce8e6; border-radius: 5px;">3°</div>
+                                    <div style="padding: 8px 15px; background-color: #fef7e0; border-radius: 5px;">4°</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 5 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 5 of 16</div>
+                        <h2>Functions of Proteins</h2>
+                        <div class="slide-content">
+                            <ul>
+                                <li><span class="highlight">Growth and repair</span> of tissues</li>
+                                <li><span class="highlight">Enzymes</span> (speed up biochemical reactions)</li>
+                                <li><span class="highlight">Hormones</span> (chemical messengers)</li>
+                                <li><span class="highlight">Transport molecules</span> (carry substances in blood)</li>
+                                <li><span class="highlight">Immune defense</span> (antibodies fight pathogens)</li>
+                                <li><span class="highlight">Movement</span> (muscle contraction)</li>
+                                <li><span class="highlight">Maintain pH and fluid balance</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 6 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 6 of 16</div>
+                        <h2>Examples of Protein Functions</h2>
+                        <div class="slide-content">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Function</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Enzyme</td>
+                                        <td>Amylase (breaks starch)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Hormone</td>
+                                        <td>Insulin (controls blood sugar)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Transport</td>
+                                        <td>Hemoglobin (carries oxygen)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Defense</td>
+                                        <td>Antibodies (fight infection)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Structural</td>
+                                        <td>Collagen (skin & bones)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Movement</td>
+                                        <td>Actin & Myosin (muscles)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 7 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 7 of 16</div>
+                        <h2>Classification of Proteins (By Shape)</h2>
+                        <div class="slide-content">
+                            <h3 style="color: #34a853; margin-top: 20px;">Fibrous Proteins</h3>
+                            <ul>
+                                <li>Long and narrow structure</li>
+                                <li>Provide structural support and strength</li>
+                                <li>Insoluble in water</li>
+                                <li>Example: <span class="highlight">Keratin</span> (hair), <span class="highlight">Collagen</span> (skin)</li>
+                            </ul>
+                            
+                            <h3 style="color: #34a853; margin-top: 20px;">Globular Proteins</h3>
+                            <ul>
+                                <li>Rounded compact shape</li>
+                                <li>Functional and metabolic roles</li>
+                                <li>Usually soluble in water</li>
+                                <li>Example: <span class="highlight">Enzymes</span>, <span class="highlight">Hemoglobin</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 8 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 8 of 16</div>
+                        <h2>Classification (By Composition)</h2>
+                        <div class="slide-content">
+                            <h3 style="color: #34a853; margin-top: 20px;">Simple Proteins</h3>
+                            <ul>
+                                <li>Made only of amino acids</li>
+                                <li>Produce only amino acids upon digestion</li>
+                                <li>Example: <span class="highlight">Albumin</span> (egg white)</li>
+                            </ul>
+                            
+                            <h3 style="color: #34a853; margin-top: 20px;">Conjugated Proteins</h3>
+                            <ul>
+                                <li>Protein + non-protein component (prosthetic group)</li>
+                                <li>Needed for specialized function</li>
+                                <li>Example: <span class="highlight">Hemoglobin</span> (with iron), <span class="highlight">Lipoprotein</span> (with lipids)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 9 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 9 of 16</div>
+                        <h2>Classification (By Function)</h2>
+                        <div class="slide-content">
+                            <ul>
+                                <li><span class="highlight">Structural proteins</span> — support cells and tissues</li>
+                                <li><span class="highlight">Transport proteins</span> — carry molecules in blood or membrane</li>
+                                <li><span class="highlight">Storage proteins</span> — store nutrients (casein in milk)</li>
+                                <li><span class="highlight">Enzymatic proteins</span> — catalysts of reactions</li>
+                                <li><span class="highlight">Defensive proteins</span> — antibodies and clotting proteins</li>
+                                <li><span class="highlight">Regulatory proteins</span> — hormones controlling processes</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 10 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 10 of 16</div>
+                        <h2>Food Sources of Protein</h2>
+                        <div class="slide-content">
+                            <ul>
+                                <li><span class="highlight">Meat and poultry</span> (complete protein)</li>
+                                <li><span class="highlight">Fish</span> (high biological value protein)</li>
+                                <li><span class="highlight">Eggs</span> (reference protein standard)</li>
+                                <li><span class="highlight">Milk and dairy products</span></li>
+                                <li><span class="highlight">Beans and legumes</span> (plant protein)</li>
+                                <li><span class="highlight">Nuts and seeds</span></li>
+                            </ul>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <i class="fas fa-utensils" style="font-size: 3rem; color: #fbbc04;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 11 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 11 of 16</div>
+                        <h2>Tests for Presence of Protein</h2>
+                        <div class="slide-content">
+                            <p>Laboratory tests detect proteins based on chemical reactions. Proteins react due to peptide bonds or amino acid groups.</p>
+                            
+                            <h3 style="color: #34a853; margin-top: 20px;">Common Tests:</h3>
+                            <ul>
+                                <li><span class="highlight">Biuret Test</span> — peptide bonds</li>
+                                <li><span class="highlight">Ninhydrin Test</span> — amino acids</li>
+                                <li><span class="highlight">Xanthoproteic Test</span> — aromatic amino acids</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 12 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 12 of 16</div>
+                        <h2>Biuret Test</h2>
+                        <div class="slide-content">
+                            <p><strong>Principle:</strong> Copper ions react with peptide bonds in alkaline solution</p>
+                            <p><strong>Procedure:</strong> Add Biuret reagent (NaOH + CuSO₄)</p>
+                            <p><strong>Positive Result:</strong> Violet or purple color</p>
+                            <p>Indicates presence of proteins/polypeptides</p>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <div style="display: inline-block; padding: 10px 20px; background-color: #8a2be2; color: white; border-radius: 8px;">
+                                    <i class="fas fa-vial"></i> Violet/Purple Color
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 13 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 13 of 16</div>
+                        <h2>Ninhydrin Test</h2>
+                        <div class="slide-content">
+                            <p><strong>Principle:</strong> Reacts with free amino groups of amino acids</p>
+                            <p><strong>Positive Result:</strong> Blue-violet color (Ruhemann's purple)</p>
+                            <p>Used to detect amino acids and small peptides (e.g., fingerprint detection)</p>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <div style="display: inline-block; padding: 10px 20px; background-color: #6a0dad; color: white; border-radius: 8px;">
+                                    <i class="fas fa-fingerprint"></i> Blue-Violet Color
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 14 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 14 of 16</div>
+                        <h2>Xanthoproteic Test</h2>
+                        <div class="slide-content">
+                            <p><strong>Principle:</strong> Nitric acid reacts with aromatic amino acids (tyrosine, tryptophan, phenylalanine)</p>
+                            <p>Heat with nitric acid</p>
+                            <p><strong>Positive Result:</strong> Yellow → orange color after adding alkali</p>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <div style="display: inline-block; padding: 10px 20px; background: linear-gradient(to right, #ffd700, #ff8c00); color: #333; border-radius: 8px;">
+                                    <i class="fas fa-flask"></i> Yellow → Orange Color
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 15 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 15 of 16</div>
+                        <h2>Summary</h2>
+                        <div class="slide-content">
+                            <ul>
+                                <li>Proteins are <span class="highlight">polymers of amino acids</span></li>
+                                <li>Perform <span class="highlight">structural and metabolic functions</span></li>
+                                <li>Classified by <span class="highlight">shape, composition, and function</span></li>
+                                <li>Detected using chemical tests: <span class="highlight">Biuret, Ninhydrin, Xanthoproteic</span></li>
+                            </ul>
+                            <div style="text-align: center; margin-top: 30px;">
+                                <i class="fas fa-check-circle" style="font-size: 4rem; color: #34a853;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 16 -->
+                    <div class="slide">
+                        <div class="slide-number">Slide 16 of 16</div>
+                        <h2>Thank You!</h2>
+                        <div class="slide-content" style="text-align: center; padding-top: 80px;">
+                            <i class="fas fa-graduation-cap" style="font-size: 5rem; color: #1a73e8; margin-bottom: 30px;"></i>
+                            <p style="font-size: 1.5rem; color: #333;">Now test your knowledge with the quiz!</p>
+                            <div style="margin-top: 40px;">
+                                <button class="btn" onclick="startQuiz()">
+                                    <i class="fas fa-play-circle"></i> Start Quiz
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn" id="prevBtn" onclick="prevSlide()">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    
+                    <div class="dots" id="slideDots">
+                        <!-- Dots will be generated by JavaScript -->
+                    </div>
+                    
+                    <button class="btn" id="nextBtn" onclick="nextSlide()">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Quiz Section -->
+            <div class="quiz-container">
+                <div class="section-title">
+                    <i class="fas fa-question-circle"></i> Protein Knowledge Quiz
+                </div>
+                
+                <div class="quiz-content">
+                    <!-- Quiz intro -->
+                    <div class="quiz-intro active" id="quizIntro">
+                        <h3>Test Your Protein Knowledge</h3>
+                        <p>This quiz contains 15 multiple-choice questions based on the presentation about proteins.</p>
+                        <p>Select the correct answer for each question. You'll receive immediate feedback after each selection.</p>
+                        <p>Try to answer all questions correctly!</p>
+                        <div style="margin-top: 30px;">
+                            <button class="btn" onclick="startQuiz()">
+                                <i class="fas fa-play"></i> Start Quiz
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Questions will be inserted here by JavaScript -->
+                    <div id="questionsContainer"></div>
+                    
+                    <!-- Results -->
+                    <div class="results" id="results">
+                        <h3>Quiz Complete!</h3>
+                        <div class="score" id="finalScore">0/15</div>
+                        <p class="score-text" id="scoreText"></p>
+                        <button class="btn restart-btn" onclick="restartQuiz()">
+                            <i class="fas fa-redo"></i> Restart Quiz
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="quiz-controls">
+                    <button class="btn" id="prevQBtn" onclick="prevQuestion()" disabled>
+                        <i class="fas fa-arrow-left"></i> Previous Question
+                    </button>
+                    <button class="btn" id="nextQBtn" onclick="nextQuestion()" disabled>
+                        Next Question <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Proteins: Functions, Types, and Tests - Interactive Educational Tool</p>
+            <p>Created for science education | All information based on biochemistry principles</p>
+        </footer>
+    </div>
+
+    <script>
+        // Presentation Slideshow
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        // Initialize slide dots
+        function initSlideDots() {
+            const dotsContainer = document.getElementById('slideDots');
+            dotsContainer.innerHTML = '';
+            
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(i));
+                dotsContainer.appendChild(dot);
+            }
+            
+            updateSlideControls();
+        }
+        
+        // Go to specific slide
+        function goToSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            // Update dots
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+            
+            updateSlideControls();
+        }
+        
+        // Next slide
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+        
+        // Previous slide
+        function prevSlide() {
+            goToSlide(currentSlide - 1);
+        }
+        
+        // Update slide controls (buttons)
+        function updateSlideControls() {
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        // Quiz functionality
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = new Array(15).fill(null);
+        const questions = [
+            {
+                question: "What are proteins primarily made of?",
+                options: ["Fatty acids", "Amino acids", "Nucleotides", "Monosaccharides"],
+                correct: 1,
+                explanation: "Proteins are polymers made up of amino acids linked together by peptide bonds."
+            },
+            {
+                question: "Which element is NOT typically found in proteins?",
+                options: ["Carbon", "Hydrogen", "Oxygen", "Phosphorus"],
+                correct: 3,
+                explanation: "Proteins primarily contain Carbon, Hydrogen, Oxygen, and Nitrogen. Phosphorus is not a typical component of proteins."
+            },
+            {
+                question: "How many common amino acids are found in living organisms?",
+                options: ["10", "20", "30", "40"],
+                correct: 1,
+                explanation: "There are 20 common amino acids that serve as the building blocks for proteins in living organisms."
+            },
+            {
+                question: "Which level of protein structure refers to the sequence of amino acids?",
+                options: ["Primary", "Secondary", "Tertiary", "Quaternary"],
+                correct: 0,
+                explanation: "The primary structure of a protein is the linear sequence of amino acids."
+            },
+            {
+                question: "Which protein function involves speeding up biochemical reactions?",
+                options: ["Structural", "Enzymatic", "Transport", "Defensive"],
+                correct: 1,
+                explanation: "Enzymes are proteins that act as biological catalysts, speeding up biochemical reactions."
+            },
+            {
+                question: "Which of these is an example of a transport protein?",
+                options: ["Amylase", "Insulin", "Hemoglobin", "Collagen"],
+                correct: 2,
+                explanation: "Hemoglobin is a transport protein that carries oxygen in the blood."
+            },
+            {
+                question: "Which type of protein has a long, narrow structure and provides structural support?",
+                options: ["Globular proteins", "Fibrous proteins", "Simple proteins", "Conjugated proteins"],
+                correct: 1,
+                explanation: "Fibrous proteins have long, narrow structures and provide structural support (e.g., keratin, collagen)."
+            },
+            {
+                question: "What type of protein is hemoglobin, which contains an iron prosthetic group?",
+                options: ["Simple protein", "Fibrous protein", "Conjugated protein", "Structural protein"],
+                correct: 2,
+                explanation: "Hemoglobin is a conjugated protein because it contains a non-protein component (the iron-containing heme group)."
+            },
+            {
+                question: "Which of these is a complete protein source with all essential amino acids?",
+                options: ["Beans", "Rice", "Eggs", "Nuts"],
+                correct: 2,
+                explanation: "Eggs are considered a complete protein source as they contain all nine essential amino acids."
+            },
+            {
+                question: "Which test detects proteins by reacting with peptide bonds to produce a violet color?",
+                options: ["Ninhydrin test", "Biuret test", "Xanthoproteic test", "Iodine test"],
+                correct: 1,
+                explanation: "The Biuret test detects peptide bonds and produces a violet/purple color in the presence of proteins."
+            },
+            {
+                question: "Which amino acids does the Xanthoproteic test specifically detect?",
+                options: ["Acidic amino acids", "Basic amino acids", "Aromatic amino acids", "Sulfur-containing amino acids"],
+                correct: 2,
+                explanation: "The Xanthoproteic test detects aromatic amino acids (tyrosine, tryptophan, phenylalanine) through nitration."
+            },
+            {
+                question: "Which protein is responsible for muscle contraction?",
+                options: ["Collagen", "Insulin", "Actin and myosin", "Hemoglobin"],
+                correct: 2,
+                explanation: "Actin and myosin are proteins that interact to cause muscle contraction."
+            },
+            {
+                question: "What is the quaternary structure of a protein?",
+                options: ["Sequence of amino acids", "Local folding patterns", "3D structure of a single polypeptide", "Combination of multiple polypeptide chains"],
+                correct: 3,
+                explanation: "Quaternary structure refers to the arrangement of multiple polypeptide chains in a protein complex."
+            },
+            {
+                question: "Which of these is an example of a structural protein?",
+                options: ["Amylase", "Insulin", "Collagen", "Hemoglobin"],
+                correct: 2,
+                explanation: "Collagen is a structural protein that provides strength to skin, bones, and connective tissues."
+            },
+            {
+                question: "What color change indicates a positive Ninhydrin test?",
+                options: ["Yellow to orange", "Blue to violet", "Red to blue", "Colorless to brown"],
+                correct: 1,
+                explanation: "The Ninhydrin test produces a blue-violet color (Ruhemann's purple) when it reacts with amino acids."
+            }
+        ];
+        
+        // Initialize quiz
+        function initQuiz() {
+            const questionsContainer = document.getElementById('questionsContainer');
+            questionsContainer.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.id = `question${index}`;
+                
+                questionDiv.innerHTML = `
+                    <div>
+                        <span class="question-number">${index + 1}</span>
+                        <span class="question-text">${q.question}</span>
+                    </div>
+                    <div class="options">
+                        ${q.options.map((option, optIndex) => `
+                            <div class="option" data-index="${optIndex}" onclick="selectAnswer(${index}, ${optIndex})">
+                                ${String.fromCharCode(65 + optIndex)}. ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback${index}"></div>
+                `;
+                
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
+        
+        // Start the quiz
+        function startQuiz() {
+            document.getElementById('quizIntro').classList.remove('active');
+            document.getElementById('questionsContainer').classList.add('active');
+            document.getElementById('results').classList.remove('active');
+            
+            document.getElementById('prevQBtn').disabled = false;
+            document.getElementById('nextQBtn').disabled = false;
+            
+            showQuestion(0);
+        }
+        
+        // Show specific question
+        function showQuestion(n) {
+            document.querySelectorAll('.question').forEach((q, index) => {
+                q.classList.remove('active');
+                if (index === n) q.classList.add('active');
+            });
+            
+            // Update quiz controls
+            document.getElementById('prevQBtn').disabled = n === 0;
+            document.getElementById('nextQBtn').disabled = n === questions.length - 1;
+            
+            // Update question number indicator
+            document.querySelectorAll('.question-number').forEach((num, index) => {
+                num.textContent = index + 1;
+            });
+            
+            currentQuestion = n;
+        }
+        
+        // Next question
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                showQuestion(currentQuestion + 1);
+            }
+        }
+        
+        // Previous question
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+        
+        // Select answer
+        function selectAnswer(questionIndex, answerIndex) {
+            const question = questions[questionIndex];
+            const optionDivs = document.querySelectorAll(`#question${questionIndex} .option`);
+            const feedbackDiv = document.getElementById(`feedback${questionIndex}`);
+            
+            // Clear previous selections
+            optionDivs.forEach(div => {
+                div.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            optionDivs[answerIndex].classList.add('selected');
+            
+            // Check if correct
+            if (answerIndex === question.correct) {
+                optionDivs[answerIndex].classList.add('correct');
+                feedbackDiv.textContent = `Correct! ${question.explanation}`;
+                feedbackDiv.className = 'feedback correct';
+                
+                // Update score if not already answered
+                if (userAnswers[questionIndex] === null) {
+                    score++;
+                }
+            } else {
+                optionDivs[answerIndex].classList.add('incorrect');
+                optionDivs[question.correct].classList.add('correct');
+                feedbackDiv.textContent = `Incorrect. The correct answer is ${String.fromCharCode(65 + question.correct)}. ${question.explanation}`;
+                feedbackDiv.className = 'feedback incorrect';
+            }
+            
+            // Store user answer
+            userAnswers[questionIndex] = answerIndex;
+            
+            // If this is the last question, show results
+            if (questionIndex === questions.length - 1) {
+                setTimeout(showResults, 1500);
+            }
+        }
+        
+        // Show quiz results
+        function showResults() {
+            document.getElementById('questionsContainer').classList.remove('active');
+            document.getElementById('results').classList.add('active');
+            
+            const finalScore = document.getElementById('finalScore');
+            const scoreText = document.getElementById('scoreText');
+            
+            finalScore.textContent = `${score}/${questions.length}`;
+            
+            // Set score message
+            if (score === questions.length) {
+                scoreText.textContent = "Perfect! You're a protein expert!";
+            } else if (score >= questions.length * 0.7) {
+                scoreText.textContent = "Great job! You have a good understanding of proteins.";
+            } else if (score >= questions.length * 0.5) {
+                scoreText.textContent = "Good effort! Review the presentation to improve your knowledge.";
+            } else {
+                scoreText.textContent = "Keep learning! Review the presentation and try again.";
+            }
+        }
+        
+        // Restart quiz
+        function restartQuiz() {
+            score = 0;
+            userAnswers = new Array(15).fill(null);
+            currentQuestion = 0;
+            
+            // Reset all question displays
+            document.querySelectorAll('.question').forEach((q, index) => {
+                const optionDivs = q.querySelectorAll('.option');
+                const feedbackDiv = document.getElementById(`feedback${index}`);
+                
+                optionDivs.forEach(div => {
+                    div.classList.remove('selected', 'correct', 'incorrect');
+                });
+                
+                feedbackDiv.textContent = '';
+                feedbackDiv.className = 'feedback';
+            });
+            
+            document.getElementById('quizIntro').classList.add('active');
+            document.getElementById('questionsContainer').classList.remove('active');
+            document.getElementById('results').classList.remove('active');
+            
+            document.getElementById('prevQBtn').disabled = true;
+            document.getElementById('nextQBtn').disabled = true;
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initSlideDots();
+            initQuiz();
+            
+            // Add keyboard navigation for slides
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+            });
+        });
+    </script>
+</body>
+</html>
